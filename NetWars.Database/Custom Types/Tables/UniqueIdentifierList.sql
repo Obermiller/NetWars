@@ -1,0 +1,1 @@
+﻿create type [dbo].[UniqueIdentifierList] as table ([Id] uniqueidentifier not null)

@@ -1,0 +1,1 @@
+﻿insert into [dbo].[User] (Email, Password) values ('admin@admin.com', 'password')
