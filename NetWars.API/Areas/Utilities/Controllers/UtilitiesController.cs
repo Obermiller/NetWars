@@ -7,12 +7,15 @@ namespace NetWars.API.Areas.Utilities.Controllers;
 
 public class UtilitiesController(ITokenLogic tokenLogic, IUrlLogic urlLogic) : ControllerBase
 {
-	//Site
+	#region Site
+
 	protected string GetBaseUrl() => urlLogic.GetBaseUrl();
 
-	//Token
-	protected Guid? GetUserId()
-	{
-		return tokenLogic.GetUserId(Request.Headers[IdentityConstants.Authorization]);
-	}
+	#endregion
+
+	#region Token
+
+	protected Guid? GetUserId() => tokenLogic.GetUserId(Request.Headers[IdentityConstants.Authorization]);
+
+	#endregion
 }

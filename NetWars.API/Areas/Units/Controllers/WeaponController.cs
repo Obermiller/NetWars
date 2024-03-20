@@ -1,9 +1,9 @@
 ﻿using Asp.Versioning;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetWars.API.Areas.Utilities.Controllers;
 using NetWars.API.Models;
+using NetWars.Core.Models.API.Units;
 using NetWars.Core.Models.Schema.Units;
 using NetWars.Logic.Identity.Contracts;
 using NetWars.Logic.Units.Contracts;
@@ -34,7 +34,7 @@ public class WeaponController : UtilitiesController
 	}
 	
 	//TODO - how do we want to get Targets in?
-	[HttpPost, Route(nameof(Create))]
+	[HttpPost, Route("CreateSingle")]
 	[ProducesResponseType(StatusCodes.Status201Created)]
 	public async Task<ActionResult<PostResult>> Create([FromBody] Weapon request)
 	{
@@ -50,6 +50,11 @@ public class WeaponController : UtilitiesController
 	[ProducesResponseType(StatusCodes.Status404NotFound)]
 	public async Task<ActionResult<Weapon>> GetById(int id)
 	{
+		if (id <= 0)
+		{
+			return BadRequest();
+		}
+		
 		var weapon = await _weaponLogic.GetById(id);
 		if (weapon is null)
 		{
@@ -57,5 +62,42 @@ public class WeaponController : UtilitiesController
 		}
 		
 		return weapon;
+	}
+	
+	[HttpGet]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	public async Task<ActionResult<List<Weapon>>> Index()
+	{
+		var weapons = await _weaponLogic.GetAll();
+		
+		return weapons;
+	}
+	
+	[HttpPut, Route("{id:int}")]
+	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Weapon))]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(StatusCodes.Status409Conflict)]
+	public async Task<ActionResult<Weapon>> Update(int id, [FromBody] Weapon request)
+	{
+		if (id <= 0)
+		{
+			return BadRequest();
+		}
+		
+		try
+		{
+			var result = await _weaponLogic.Update(id, request);
+			
+			if (result)
+			{
+				return Created(_baseRoute + id, new PostResult { Created = id });
+			}
+		}
+		catch (InvalidOperationException)
+		{
+			return NoContent();
+		}
+		
+		return Conflict();
 	}
 }

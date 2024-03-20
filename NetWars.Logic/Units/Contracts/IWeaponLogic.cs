@@ -5,7 +5,9 @@ namespace NetWars.Logic.Units.Contracts;
 
 public interface IWeaponLogic
 {
-	Task<WeaponResponse?> GetById(int id);
-	Task<List<WeaponResponse>> GetByIds(IEnumerable<int> ids);
+	Task<List<Weapon>> GetAll();
+	Task<Weapon?> GetById(int id);
+	Task<List<Weapon>> GetByIds(IEnumerable<int> ids);
 	Task<int> Insert(Weapon weapon);
+	Task<bool> Update(int id, Weapon weapon);
 }

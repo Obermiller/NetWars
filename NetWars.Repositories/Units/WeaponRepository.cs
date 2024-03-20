@@ -8,13 +8,25 @@ namespace NetWars.Repositories.Units;
 
 public class WeaponRepository(IConfiguration config) : SqlConnection(config), IWeaponRepository
 {
+	public async Task<IEnumerable<Weapon>> GetAll()
+	{
+		using var conn = CreateConnection();
+		return await conn.GetListAsync<Weapon>();
+	}
+	
 	public async Task<Weapon?> GetById(int id)
 	{
 		using var conn = CreateConnection();
-		
-		var weapon = await conn.GetAsync<Weapon>(new { Id = id });
 
-		return weapon;
+		//TODO
+		try
+		{
+			return await conn.GetAsync<Weapon?>(new { Id = id });
+		}
+		catch (Exception)
+		{
+			return null;
+		}
 	}
 
 	public async Task<IEnumerable<Weapon>> GetByIds(IEnumerable<int> ids)
@@ -34,5 +46,14 @@ public class WeaponRepository(IConfiguration config) : SqlConnection(config), IW
 		var id = await conn.InsertAsync(weapon);
 		
 		return id;
+	}
+
+	public async Task<bool> Update(Weapon weapon)
+	{
+		var conn = CreateConnection();
+
+		var updated = await conn.UpdateAsync(weapon);
+
+		return updated;
 	}
 }

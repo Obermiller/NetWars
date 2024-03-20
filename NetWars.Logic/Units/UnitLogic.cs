@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using NetWars.Core.Models.API.Units;
+using NetWars.Core.Models.Schema.Units;
 using NetWars.Logic.Units.Contracts;
 using NetWars.Repositories.Units.Contracts;
 
@@ -26,7 +27,7 @@ public class UnitLogic(IWeaponLogic weaponLogic, IUnitRepository unitRepository,
 			foreach (var unit in results)
 			{
 				weaponsById.TryGetValue(unit.PrimaryWeaponId, out var primaryWeapon);
-				unit.PrimaryWeapon = primaryWeapon ?? new WeaponResponse();
+				unit.PrimaryWeapon = primaryWeapon ?? new Weapon();
 				
 				if (unit.SecondaryWeaponId is not null && weaponsById.TryGetValue(unit.SecondaryWeaponId.Value, out var secondaryWeapon))
 				{
