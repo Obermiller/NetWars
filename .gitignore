@@ -16,3 +16,23 @@ bld/
 
 *.jfm
 *.dbmdl
+
+logs
+*.log
+npm-debug.log*
+
+build/Release
+
+node_modules/
+
+dist/
+
+typings/
+
+.npm-debug
+
+.eslintcache
+
+.node_repl_History
+
+*.tgz

@@ -90,6 +90,33 @@ DapperExtensions.DapperExtensions.SetMappingAssemblies(
     }
 );
 
+if (builder.Environment.IsDevelopment())
+{
+    //Establish CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback)
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+    });
+}
+else
+{
+    //Establish CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins("") //TODO
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+    });
+}
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -110,6 +137,8 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
