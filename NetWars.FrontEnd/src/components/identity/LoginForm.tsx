@@ -1,8 +1,8 @@
 ﻿import { Button, Container, TextField } from '@mui/material';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, ReactNode, useState } from 'react';
 import { useAuth } from './AuthProvider.tsx';
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC = (): ReactNode => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const { login } = useAuth();
